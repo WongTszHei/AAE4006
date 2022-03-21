@@ -90,11 +90,11 @@ function sys = mdlDerivatives(t, x, uu, P)
     m     = uu(5);
     n     = uu(6);
     % Time derivative of pn, pe, pd
-    neddot = []; % To be completed by students
+    neddot = [[cos(theta)*cos(psi) sin(phi)*sin(theta)*cos(psi)-cos(phi)*sin(psi) cos(phi)*sin(theta)*cos(psi)+sin(phi)*sin(psi);cos(theta)*sin(psi) sin(phi)*sin(theta)*sin(psi)+cos(phi)*cos(psi) cos(phi)*sin(theta)*cos(psi)-sin(phi)*cos(psi);-sin(theta) sin(phi)*cos(theta) cos(phi)*cos(theta)]*[u;v;w]]; % To be completed by students
     % Time derivative of u, v, w
-    veldot = []; % To be completed by students
+    veldot = [[r*v-q*w;p*w-r*u;q*u-p*v]+((1/m)*[fx;fy;fz])]; % To be completed by students
     % Time derivative of phi, theta, psi
-    attdot = []; % To be completed by students
+    attdot = [[1 sin(phi)*tan(theta) cos(phi)*tan(theta);0 cos(phi) -sin(phi);0 sin(phi)/cos(theta) cos(phi)/cos(theta)]*[p;q;r]]; % To be completed by students
     % Computation for 8 gamma
     gamma = P.Jx * P.Jz - P.Jxz^2;
     gam1 = P.Jxz * (P.Jx-P.Jy + P.Jz)/gamma;
@@ -106,7 +106,7 @@ function sys = mdlDerivatives(t, x, uu, P)
     gam7 = ((P.Jx - P.Jy)*P.Jx + P.Jxz^2)/gamma;
     gam8 = P.Jx/gamma;
     % Time derivative of p, q, r
-    attratdot = []; % To be completed by students
+    attratdot = [[gam1*p*q-gam2*q*r;gam5*p*r-gam6*(p^2-r^2);gam7*p*q-gam1*q*r]+[gam3*ell+gam4*n;(1/P.Jy)*m;gam4*ell+gam8*n]]; % To be completed by students
   
     pndot = neddot(1);
     pedot = neddot(2);
