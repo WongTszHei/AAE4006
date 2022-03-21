@@ -1,6 +1,5 @@
 % clear;clc;close all
 %% Put the code you developed last week about drawing an aircraft below
-clear;clc;close all
 % parameters of the aircraft model
 fuse_l1=1.5; % center of mass to tip of fuselage
 fuse_l2=1; % center of mass to widest part of fuselage
