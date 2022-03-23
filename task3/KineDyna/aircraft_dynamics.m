@@ -92,7 +92,7 @@ function sys = mdlDerivatives(t, x, uu, P)
     % Time derivative of pn, pe, pd
     neddot = [[cos(theta)*cos(psi) sin(phi)*sin(theta)*cos(psi)-cos(phi)*sin(psi) cos(phi)*sin(theta)*cos(psi)+sin(phi)*sin(psi);cos(theta)*sin(psi) sin(phi)*sin(theta)*sin(psi)+cos(phi)*cos(psi) cos(phi)*sin(theta)*cos(psi)-sin(phi)*cos(psi);-sin(theta) sin(phi)*cos(theta) cos(phi)*cos(theta)]*[u;v;w]]; % To be completed by students
     % Time derivative of u, v, w
-    veldot = [[r*v-q*w;p*w-r*u;q*u-p*v]+((1/m)*[fx;fy;fz])]; % To be completed by students
+    veldot = [[r*v-q*w;p*w-r*u;q*u-p*v]+((1/P.mass)*[fx;fy;fz])]; % To be completed by students
     % Time derivative of phi, theta, psi
     attdot = [[1 sin(phi)*tan(theta) cos(phi)*tan(theta);0 cos(phi) -sin(phi);0 sin(phi)/cos(theta) cos(phi)/cos(theta)]*[p;q;r]]; % To be completed by students
     % Computation for 8 gamma
