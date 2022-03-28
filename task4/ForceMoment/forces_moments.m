@@ -85,7 +85,8 @@ function out = forces_moments(x, delta, wind, P)
     gForce =  [-m*g*sin(theta);m*g*cos(theta)*sin(phi);m*g*cos(theta)*cos(phi)];
     
     % Aerodynamic force (ensure aForce is a column vector)
-    aForce = [];
+    aForce = 1/2*P.rho*Va^2*P.S_wing*[C_X+C_X_q*P.c*q/(2*Va)+C_X_delta_e* delta_e;...
+                                      ];
     
     % Propulsion force (ensure pForce is a column vector)
     pForce = ([];
