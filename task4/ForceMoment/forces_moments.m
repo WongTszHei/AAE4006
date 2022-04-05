@@ -85,17 +85,22 @@ function out = forces_moments(x, delta, wind, P)
     gForce =  [-m*g*sin(theta);m*g*cos(theta)*sin(phi);m*g*cos(theta)*cos(phi)];
     
     % Aerodynamic force (ensure aForce is a column vector)
-    aForce = 1/2*P.rho*Va^2*P.S_wing*[C_X+C_X_q*P.c*q/(2*Va)+C_X_delta_e* delta_e;...
-                                      ];
+    aForce = 1/2*P.rho*Va^2*P.S_wing*[C_X+C_X_q*P.c*q/(2*Va)+C_X_delta_e * delta_e;...
+                                      P.C_Y_0+P.C_Y_beta * beta+P.C_Y_p * P.b*p/(2*Va)+P.C_Y_r * P.b*r/(2*Va)+P.C_Y_delta_a*delta_a+P.C_Y_delta_r*delta_r;...
+                                      C_Z+C_Z_q*P.c*/(2*Va)+C_Z_delta_e * delta_e];
     
     % Propulsion force (ensure pForce is a column vector)
-    pForce = ([];
+    pForce = 1/2 * P.rho *P.S_prop * P.C_prop*[(P.k_motor *delta_t)^2 - Va^2;...
+                                                0;...
+                                                0];
     
     % Overall force 
     Force = gForce + aForce + pForce;
 
     % Torques due to aerodynamics and propulsion (ensure Torque is a column vector)
-    Torque = [];
+    Torque = 1/2 *P.rho * Va^2 * P.S_wing * [P.b*(P.C_ell_0+P.C_ell_beta *beta + P.C_ell_p*P.b/(2*Va)*p+P.C_ell_r*P.b/(2*Va)*r+P.C_ell_delta_a*delta_a+P.C_ell_delta_r*delta_r);...
+                                             P.c*(P.C_m_0+P.C_m_alpha*alpha+P.C_m_q*P.c /(2*Va) * q+P.C_m_delta_e * delta_e);...
+                                             P.b*(P.C_n_0+P.C_n_beta*beta+P.C_n_p*P.b/(2* Va)*p+P.C_n_r*P.b/(2* Va)*r+P.C_n_delta_a*delta_a+P.C_n_delta_r*delta_r)];
 
 
     % Construct the output vector
