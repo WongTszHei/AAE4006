@@ -82,7 +82,7 @@ function out = forces_moments(x, delta, wind, P)
     C_Z_delta_e = -P.C_D_delta_e*sin(alpha)-P.C_L_delta_e*cos(alpha);
     
     % Gravitational force (ensure gForce is a column vector)
-    gForce =  [-P.m*P.gravity*sin(theta);P.m*P.gravity*cos(theta)*sin(phi);P.m*P.gravity*cos(theta)*cos(phi)];
+    gForce =  [-P.mass*P.gravity*sin(theta);P.mass*P.gravity*cos(theta)*sin(phi);P.mass*P.gravity*cos(theta)*cos(phi)];
     
     % Aerodynamic force (ensure aForce is a column vector)
     aForce = 1/2*P.rho*Va^2*P.S_wing*[C_X+C_X_q*P.c*q/(2*Va)+C_X_delta_e * delta_e;...
