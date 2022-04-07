@@ -59,14 +59,14 @@ function out = forces_moments(x, delta, wind, P)
     w_d = V_w_NED(3);
     
     % Compute airspeed vector in body frame
-    V_a_b =[u_w;v_w;w_w];
+    V_a_b =[u;v;w;]-V_w_b ;
     
     % Compute airspeed magnitute
-    Va =sqrt(u_r^2+v_r^2+w_r^2);
+    Va =sqrt(V_a_b(1)^2+V_a_b(2)^2+V_a_b(3)^2);
 
     % Compute alpha and beta
-    alpha =arctan(w_r/u_r) ;
-    beta =arcsin(v_r/sqrt(u_r^2+v_r^2+w_r^2));
+    alpha =atan(V_a_b(3)/V_a_b(1)) ;
+    beta =asin(V_a_b(2)/Va);
     
     % Compute the parameters used in the models of forces and torques
     sigma_alpha = (1+exp(-P.M*(alpha-P.alpha0))+exp(P.M*(alpha+P.alpha0)))/...
@@ -106,5 +106,7 @@ function out = forces_moments(x, delta, wind, P)
     % Construct the output vector
     out = [Force; Torque; Va; alpha; beta; w_n; w_e; w_d];
 end
+
+
 
 
