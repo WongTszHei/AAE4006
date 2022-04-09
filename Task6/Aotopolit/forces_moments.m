@@ -40,16 +40,18 @@ function out = forces_moments(x, delta, wind, P)
     w_wg    = wind(6); % gust along body k-axis
 
     % Define transformation matrix from vehicle frame to body frame
-    R_v_b = [];
+    R_v_b = [cos(theta)*cos(psi) cos(theta)*sin(psi) -sin(theta);
+        sin(phi)*sin(theta)*cos(psi)-cos(phi)*sin(psi) sin(phi)*sin(theta)*sin(psi)+cos(phi)*cos(psi) sin(phi)*cos(theta);
+        cos(phi)*sin(theta)*cos(psi)+sin(phi)*sin(psi) cos(phi)*sin(theta)*sin(psi)-sin(phi)*cos(psi) cos(phi)*cos(theta)];
 
     % Define transformation matrix from body frame to vehicle frame
-    R_b_v = [];
+    R_b_v = transpose(R_v_b);
 
     % Compute overall wind data in body frame
-    V_w_b = ;
+    V_w_b =(R_v_b)*[w_ns;w_es;w_ds]+[u_wg;v_wg;w_wg];
 
     % Compute overall wind in NED frame
-    V_w_NED = ;
+    V_w_NED =[w_ns;w_es;w_ds];
 
     % define the wind components in NED frame
     w_n = V_w_NED(1);
@@ -57,14 +59,14 @@ function out = forces_moments(x, delta, wind, P)
     w_d = V_w_NED(3);
     
     % Compute airspeed vector in body frame
-    V_a_b = ;
+    V_a_b =[u;v;w;]-V_w_b ;
     
     % Compute airspeed magnitute
-    Va = ;
+    Va =sqrt(V_a_b(1)^2+V_a_b(2)^2+V_a_b(3)^2);
 
     % Compute alpha and beta
-    alpha = ;
-    beta = ;
+    alpha =atan(V_a_b(3)/V_a_b(1)) ;
+    beta =asin(V_a_b(2)/Va);
     
     % Compute the parameters used in the models of forces and torques
     sigma_alpha = (1+exp(-P.M*(alpha-P.alpha0))+exp(P.M*(alpha+P.alpha0)))/...
@@ -80,19 +82,25 @@ function out = forces_moments(x, delta, wind, P)
     C_Z_delta_e = -P.C_D_delta_e*sin(alpha)-P.C_L_delta_e*cos(alpha);
     
     % Gravitational force (ensure gForce is a column vector)
-    gForce =  [];
+    gForce =  [-P.mass*P.gravity*sin(theta);P.mass*P.gravity*cos(theta)*sin(phi);P.mass*P.gravity*cos(theta)*cos(phi)];
     
     % Aerodynamic force (ensure aForce is a column vector)
-    aForce = [];
+    aForce = 1/2*P.rho*Va^2*P.S_wing*[C_X+C_X_q*P.c*q/(2*Va)+C_X_delta_e * delta_e;...
+                                      P.C_Y_0+P.C_Y_beta * beta+P.C_Y_p * P.b*p/(2*Va)+P.C_Y_r * P.b*r/(2*Va)+P.C_Y_delta_a*delta_a+P.C_Y_delta_r*delta_r;...
+                                      C_Z+C_Z_q*P.c/(2*Va)+C_Z_delta_e * delta_e];
     
     % Propulsion force (ensure pForce is a column vector)
-    pForce = [];
+    pForce = 1/2 * P.rho *P.S_prop * P.C_prop*[(P.k_motor *delta_t)^2 - Va^2;...
+                                                0;...
+                                                0];
     
     % Overall force 
     Force = gForce + aForce + pForce;
 
     % Torques due to aerodynamics and propulsion (ensure Torque is a column vector)
-    Torque = [];
+    Torque = 1/2 *P.rho * Va^2 * P.S_wing * [P.b*(P.C_ell_0+P.C_ell_beta *beta + P.C_ell_p*P.b/(2*Va)*p+P.C_ell_r*P.b/(2*Va)*r+P.C_ell_delta_a*delta_a+P.C_ell_delta_r*delta_r);...
+                                             P.c*(P.C_m_0+P.C_m_alpha*alpha+P.C_m_q*P.c /(2*Va) * q+P.C_m_delta_e * delta_e);...
+                                             P.b*(P.C_n_0+P.C_n_beta*beta+P.C_n_p*P.b/(2* Va)*p+P.C_n_r*P.b/(2* Va)*r+P.C_n_delta_a*delta_a+P.C_n_delta_r*delta_r)];
 
 
     % Construct the output vector
