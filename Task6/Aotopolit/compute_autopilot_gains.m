@@ -186,14 +186,14 @@ UAV.W_h = 10;   % design parameter
 UAV.omega_n_h = 1 / UAV.W_h * UAV.omega_n_theta;
 UAV.zeta_h = 1.2;     % design parameter
 UAV.ki_h = UAV.omega_n_h^2 / (UAV.K_theta_DC * UAV.Va0);
-UAV.kp_h = 2 * UAV.zeta_h * UAV.omega_n_h / (UAV.K_theta_dc * UAV.Va0);
+UAV.kp_h = 2 * UAV.zeta_h * UAV.omega_n_h / (UAV.K_theta_DC * UAV.Va0);
 
 % airspeed with Pitch
 UAV.W_V2 = 7;   % design parameter
 UAV.omega_n_V2 = 1 / UAV.W_V2 * UAV.omega_n_theta;
 UAV.zeta_V2 = 0.707;    % design parameter
 UAV.ki_V2 = -UAV.omega_n_V2^2/(UAV.K_theta_DC * UAV.a_V3);
-UAV.kp_V2 = (UAV.a_V1 - 2 * UAV.zeta_v2 * UAV.omega_n_V2) / (UAV.K_theta_DC * UAV.a_V3);
+UAV.kp_V2 = (UAV.a_V1 - 2 * UAV.zeta_V2 * UAV.omega_n_V2) / (UAV.K_theta_DC * UAV.a_V3);
 
 % airspeed with throttle
 UAV.omega_n_V = 5;   % design parameter
