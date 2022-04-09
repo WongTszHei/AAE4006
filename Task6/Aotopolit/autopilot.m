@@ -188,7 +188,7 @@ error = theta_c-theta;
     differentiator = q;
     kp = P.kp_theta;
     kd = P.kd_theta;
-    delta_e = sat(kp*error-kd*differentiator,P.delta_e_max,-P.delta_e_max);
+    delta_e = sat(-kp_theta*error+kd_theta*differentiator,P.delta_e_max,-P.delta_e_max);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -233,7 +233,7 @@ function delta_t = airspeed_with_throttle_hold(Va_c, Va, flag, P)
     end
     error = Va_c - Va;
     integratorV = integratorV+P.Ts*error;
-    delta_t = sat(P.kp_V*error+P.ki_V*integratorV,P.theta_max,-P.theta_max);
+    delta_t = sat(P.kp_V*error+P.ki_V*integratorV,1,0);
 
 end
 
